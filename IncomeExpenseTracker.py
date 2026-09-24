@@ -1,8 +1,9 @@
+import datetime
 import sys
 from PyQt5.QtWidgets import (QWidget, QApplication, QLabel,
                              QHBoxLayout,QVBoxLayout)
 from PyQt5.QtGui import QIcon, QPixmap, QFont
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTime
 
 class widget(QWidget):
     def __init__(self):
@@ -25,16 +26,31 @@ class widget(QWidget):
         "border: 1px solid;")
         self.top_label.setAlignment(Qt.AlignCenter)
 
+        #Today's date display
+        self.date_label = QLabel(f"Current date: {datetime.date.today()}",self)
+        self.date_label.setGeometry(250,50,300,45)
+        self.date_label.setStyleSheet("color: hsl(113, 100%, 50%);"
+                                      "font-size: 19px;" 
+                                      "font-weight: Bold;")
+
         # Top Image to go with the top label
         self.image = QPixmap("INCOME-EXPENSE-tracker\\BankImage.jpg")
         self.bank_pic = QLabel(self)
         self.bank_pic.setPixmap(self.image)
         self.bank_pic.setStyleSheet(
         "font: 20px;" 
-        "border:3px solid;" \
+        "border:3px solid;" 
         "border-radius: 10px;")
         self.bank_pic.setScaledContents(True)
         self.bank_pic.setGeometry(210,0,40,45)
+"""
+        # Layouts
+        central_widget = QWidget()
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.top_label)
+        vbox.addWidget(self.date_label)
+        central_widget.setLayout(vbox)
+"""
 
 def main():
     app = QApplication(sys.argv)
