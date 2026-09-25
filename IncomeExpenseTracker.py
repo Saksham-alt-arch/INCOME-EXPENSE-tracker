@@ -1,9 +1,8 @@
 import datetime
 import sys
-from PyQt5.QtWidgets import (QWidget, QApplication, QLabel,
-                             QHBoxLayout,QVBoxLayout)
-from PyQt5.QtGui import QIcon, QPixmap, QFont
-from PyQt5.QtCore import Qt, QTime
+from PyQt5.QtWidgets import (QWidget, QApplication, QLabel)
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtCore import Qt
 
 class widget(QWidget):
     def __init__(self):
@@ -16,7 +15,7 @@ class widget(QWidget):
 
     def initUI(self):
         # Top label
-        self.top_label = QLabel("INCOME - EXPENSE - TRACKER\nTrack *  Manage  *  Grow",self)
+        self.top_label = QLabel("INCOME - EXPENSE - TRACKER\nTrack 🌻  Manage  🌻  Grow",self)
         self.top_label.setGeometry(250,0,300,45)
         self.top_label.setStyleSheet(
         "background-color: hsl(275, 8%, 28%);"
@@ -25,13 +24,6 @@ class widget(QWidget):
         "color: hsl(176, 100%, 50%);" 
         "border: 1px solid;")
         self.top_label.setAlignment(Qt.AlignCenter)
-
-        #Today's date display
-        self.date_label = QLabel(f"Current date: {datetime.date.today()}",self)
-        self.date_label.setGeometry(250,50,300,45)
-        self.date_label.setStyleSheet("color: hsl(113, 100%, 50%);"
-                                      "font-size: 19px;" 
-                                      "font-weight: Bold;")
 
         # Top Image to go with the top label
         self.image = QPixmap("INCOME-EXPENSE-tracker\\BankImage.jpg")
@@ -43,14 +35,54 @@ class widget(QWidget):
         "border-radius: 10px;")
         self.bank_pic.setScaledContents(True)
         self.bank_pic.setGeometry(210,0,40,45)
-"""
-        # Layouts
-        central_widget = QWidget()
-        vbox = QVBoxLayout()
-        vbox.addWidget(self.top_label)
-        vbox.addWidget(self.date_label)
-        central_widget.setLayout(vbox)
-"""
+
+        #Today's date display
+        self.date_label = QLabel(f"Current date: {datetime.date.today()}",self)
+        self.date_label.setGeometry(250,50,300,45)
+        self.date_label.setStyleSheet("color: hsl(113, 100%, 50%);"
+                                      "font-size: 19px;" 
+                                      "font-weight: Bold;")
+
+        #Account Summary Label
+        self.acc_summary_label = QLabel("🧾 Account Summary",self)
+        self.acc_summary_label.setGeometry(20,100,400,200)
+        self.acc_summary_label.setStyleSheet("border: 3px solid;"
+                                             "font-size: 19px;" 
+                                             "font-weight: Bold;"
+                                             "color: hsl(32, 100%, 50%);"
+                                             "border-radius: 15px;")
+        self.acc_summary_label.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
+
+        # Declaring Variables
+
+        self.total_balance = 0
+        self.total_income = 0
+        self.total_expenses = 0
+        float(self.total_balance)
+        float(self.total_income)
+        float(self.total_expenses)
+
+        # Creating labels below the Account Summary Label
+
+        self.total_balance_label = QLabel(f"Total Balance: $ {self.total_balance:,.2f}",self)
+        self.total_balance_label.setGeometry(20,140,400,70)
+        self.total_balance_label.setStyleSheet("color: hsl(153, 100%, 50%);"
+                                               "border: 3px solid;" 
+                                               "font-weight: Bold;" 
+                                               "font-size: 23px;" 
+                                               "border: 3px solid;")
+        
+        self.total_income = QLabel(f"Total Income: $ {self.total_income:,.2f}",self)
+        self.total_income.setGeometry(26,202,390,47)
+        self.total_income.setStyleSheet("color: hsl(113, 100%, 50%);"
+                                        "font-weight: Bold;" 
+                                        "font-size: 19px;")
+        
+        self.total_expenses = QLabel(f"Total Expenses: $ {self.total_expenses:,.2f}",self)
+        self.total_expenses.setGeometry(26,245,390,50)
+        self.total_expenses.setStyleSheet("color: hsl(0, 100%, 62%);" 
+                                        "font-weight: Bold;" 
+                                        "font-size: 19px;")
 
 def main():
     app = QApplication(sys.argv)
