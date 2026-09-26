@@ -1,6 +1,6 @@
 import datetime
 import sys
-from PyQt5.QtWidgets import (QWidget, QApplication, QLabel)
+from PyQt5.QtWidgets import (QWidget, QApplication, QLabel, QPushButton)
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt
 
@@ -83,6 +83,28 @@ class widget(QWidget):
         self.total_expenses.setStyleSheet("color: hsl(0, 100%, 62%);" 
                                         "font-weight: Bold;" 
                                         "font-size: 19px;")
+
+        # Creating the quick Actions Sections
+        self.quick_action_label = QLabel("⚡ Quick Actions",self)
+        self.quick_action_label.setGeometry(500,100,250,40)
+        self.quick_action_label.setStyleSheet("font-size: 20px;" 
+                                              "font-weight: Bold;" 
+                                              "color: hsl(66, 100%, 50%)")
+        self.quick_action_label.setAlignment(Qt.AlignCenter)
+
+        # Creating Buttons
+        self.income_button = QPushButton("➕ Add Income",self)
+        self.income_button.setGeometry(500,150,250,40)
+        self.expense_button = QPushButton("➖ Add Expense",self)
+        self.expense_button.setGeometry(500,200,250,40)
+        self.transactions_button = QPushButton("📂 View Transactions",self)
+        self.transactions_button.setGeometry(500,250,250,40)
+
+        self.income_button.setObjectName("income_button")
+        self.expense_button.setObjectName("expense_button")
+        self.transactions_button.setObjectName("transactions_button")
+
+        # Setting CSS Styles to button
 
 def main():
     app = QApplication(sys.argv)
