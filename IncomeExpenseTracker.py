@@ -1,16 +1,15 @@
 import datetime
 import sys
-from PyQt5.QtWidgets import (QWidget, QApplication, QLabel, QPushButton)
+from PyQt5.QtWidgets import (QMainWindow, QApplication, QLabel, QPushButton)
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt
 
-class widget(QWidget):
+class widget(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Income-Expense-Tracker")
         self.setWindowIcon(QIcon("INCOME-EXPENSE-tracker\\BankImage.jpg"))
         self.setGeometry(600,150,800,700)
-        self.setStyleSheet("background-color: hsl(176, 5%, 25%);")
         self.initUI()
 
     def initUI(self):
@@ -41,12 +40,13 @@ class widget(QWidget):
         self.date_label.setGeometry(250,50,300,45)
         self.date_label.setStyleSheet("color: hsl(113, 100%, 50%);"
                                       "font-size: 19px;" 
-                                      "font-weight: Bold;")
+                                      "font-weight: Bold;" 
+                                      "text-decoration: underline;")
 
         #Account Summary Label
         self.acc_summary_label = QLabel("🧾 Account Summary",self)
         self.acc_summary_label.setGeometry(20,100,400,200)
-        self.acc_summary_label.setStyleSheet("border: 3px solid;"
+        self.acc_summary_label.setStyleSheet("border: 2px solid;"
                                              "font-size: 19px;" 
                                              "font-weight: Bold;"
                                              "color: hsl(32, 100%, 50%);"
@@ -67,10 +67,9 @@ class widget(QWidget):
         self.total_balance_label = QLabel(f"Total Balance: $ {self.total_balance:,.2f}",self)
         self.total_balance_label.setGeometry(20,140,400,70)
         self.total_balance_label.setStyleSheet("color: hsl(153, 100%, 50%);"
-                                               "border: 3px solid;" 
                                                "font-weight: Bold;" 
-                                               "font-size: 23px;" 
-                                               "border: 3px solid;")
+                                               "font-size: 23px;"
+                                               "border: 2px solid;")
         
         self.total_income = QLabel(f"Total Income: $ {self.total_income:,.2f}",self)
         self.total_income.setGeometry(26,202,390,47)
@@ -92,19 +91,40 @@ class widget(QWidget):
                                               "color: hsl(66, 100%, 50%)")
         self.quick_action_label.setAlignment(Qt.AlignCenter)
 
-        # Creating Buttons
+        # Creating Buttons and adding CSS styles to them
         self.income_button = QPushButton("➕ Add Income",self)
         self.income_button.setGeometry(500,150,250,40)
+
         self.expense_button = QPushButton("➖ Add Expense",self)
         self.expense_button.setGeometry(500,200,250,40)
+
         self.transactions_button = QPushButton("📂 View Transactions",self)
         self.transactions_button.setGeometry(500,250,250,40)
+
+        #Creating Object names for the buttons
 
         self.income_button.setObjectName("income_button")
         self.expense_button.setObjectName("expense_button")
         self.transactions_button.setObjectName("transactions_button")
 
-        # Setting CSS Styles to button
+        # Adding css styles to buttons and window
+        self.setStyleSheet("""
+            QMainWindow{background-color: hsl(176, 5%, 25%);}
+
+            QPushButton{font-size: 19px;
+            color: hsl(118, 0%, 99%);
+            font-weight: Bold;
+            border-radius: 15px;
+            border: 1px solid;}
+
+            QPushButton#income_button{background-color: hsl(118, 54%, 43%);}
+            QPushButton#expense_button{background-color: hsl(0, 52%, 42%);}
+            QPushButton#transactions_button{background-color: hsl(71, 52%, 42%);}
+
+            QPushButton#income_button:hover{background-color: hsl(118, 54%, 55%);}
+            QPushButton#expense_button:hover{background-color: hsl(0, 52%, 55%);}
+            QPushButton#transactions_button:hover{background-color: hsl(71, 52%, 55%);}
+        """)
 
 def main():
     app = QApplication(sys.argv)
