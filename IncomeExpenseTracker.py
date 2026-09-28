@@ -1,5 +1,6 @@
 import datetime
 import sys
+import mysql.connector
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QVBoxLayout, QRadioButton, QHBoxLayout,
                             QLabel, QPushButton, QWidget, QLineEdit)
 from PyQt5.QtGui import QIcon, QPixmap
@@ -130,7 +131,7 @@ class MainWindow(QMainWindow):
             QPushButton#expense_button:hover{background-color: hsl(0, 52%, 55%);}
             QPushButton#transactions_button:hover{background-color: hsl(71, 52%, 55%);}
         """)
-
+        
         self.income_button.clicked.connect(self.add_income)
         self.expense_button.clicked.connect(self.add_expense)
         self.transactions_button.clicked.connect(self.view_transactions)
@@ -138,6 +139,10 @@ class MainWindow(QMainWindow):
         # Creating functions for signal.connect(slot)
 
     def add_income(self):
+        self.incomeWindow.incomeButtonIW.setDisabled(False)
+        self.incomeWindow.incomeButtonIW.setText("Add Income")
+        self.incomeWindow.income_description.clear()
+        self.incomeWindow.income_amount.clear()
         self.incomeWindow.show()
 
     def add_expense(self):
@@ -181,6 +186,29 @@ class income_window(QMainWindow):
                 background-color: hsl(118, 54%, 43%);}
             QPushButton:hover{background-color: hsl(118, 54%, 55%);}
         """)
+
+        self.incomeButtonIW.clicked.connect(self.income_sql)
+
+    def income_sql(self):
+        desc = self.income_description.text()
+        amt = float(self.income_amount.text())
+        mydb = mysql.connector.connect(host = "LocalHost",
+                                       user = "root",
+                                       password = "MAHSKAS@Hell99",
+                                       database = "income_expense_tracker")
+
+        my_cursor = mydb.cursor()
+
+        sql = "INSERT INTO transactions(Date_,Description_,Type_,Amount_) " \
+                "VALUES(CURRENT_DATE(),%s,%s,%s);"
+        values = (desc,"Income",amt)
+
+        my_cursor.execute(sql,values)
+        mydb.commit()
+
+        self.incomeButtonIW.setText("Income Added!")
+        self.incomeButtonIW.setDisabled(True)
+        self.incomeButtonIW.setStyleSheet("color: Black;")
 
 class expense_window(QMainWindow):
     def __init__(self):
