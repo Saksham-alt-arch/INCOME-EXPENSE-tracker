@@ -1,6 +1,6 @@
 import datetime
 import sys
-from PyQt5.QtWidgets import (QMainWindow, QApplication, QVBoxLayout,
+from PyQt5.QtWidgets import (QMainWindow, QApplication, QVBoxLayout, QRadioButton, QHBoxLayout,
                             QLabel, QPushButton, QWidget, QLineEdit)
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt
@@ -149,32 +149,118 @@ class MainWindow(QMainWindow):
 class income_window(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setGeometry(750,350,550,200)
+        self.setGeometry(800,350,400,200)
         self.setWindowTitle("Add Income")
         self.setWindowIcon(QIcon("INCOME-EXPENSE-tracker\\BankImage.jpg"))
 
+        self.income_description = QLineEdit()
+        self.income_description.setPlaceholderText("Add income Description here")
+        self.income_amount = QLineEdit()
+        self.income_amount.setPlaceholderText("$ Add income Amount here")
+        self.incomeButtonIW = QPushButton("Add Income",self)
+
+        # Adding vertical layout manager to the income_window
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.income_description)
+        vbox.addWidget(self.income_amount)
+        vbox.addWidget(self.incomeButtonIW)
+
+        central_widget.setLayout(vbox)
+        
         self.setStyleSheet("""
             QMainWindow{background-color: hsl(176, 5%, 25%);}
+            QLineEdit{font-size: 20px;}
+            QLineEdit:focus{background-color: hsl(217, 6%, 65%)}
+            QPushButton{font-size: 20px;
+                font-weight: Bold;
+                border: 2px solid;
+                padding: 15px 30px;
+                border-radius: 25px;
+                background-color: hsl(118, 54%, 43%);}
+            QPushButton:hover{background-color: hsl(118, 54%, 55%);}
         """)
 
 class expense_window(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setGeometry(750,350,550,200)
+        self.setGeometry(800,350,400,200)
         self.setWindowTitle("Add Expense")
         self.setWindowIcon(QIcon("INCOME-EXPENSE-tracker\\BankImage.jpg"))
+
+        self.expense_description = QLineEdit()
+        self.expense_description.setPlaceholderText("Add expense Description here")
+        self.expense_amount = QLineEdit()
+        self.expense_amount.setPlaceholderText("$ Add expense Amount here")
+        self.expenseButtonEW = QPushButton("Add Expense",self)
+
+        # Adding vertical layout manager to the expense_window
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.expense_description)
+        vbox.addWidget(self.expense_amount)
+        vbox.addWidget(self.expenseButtonEW)
+        
+        central_widget.setLayout(vbox)
+
         self.setStyleSheet("""
             QMainWindow{background-color: hsl(176, 5%, 25%);}
+            QLineEdit{font-size: 20px;}
+            QLineEdit:focus{background-color: hsl(217, 6%, 65%)}
+            QPushButton{font-size: 20px;
+                font-weight: Bold;
+                border: 2px solid;
+                padding: 15px 30px;
+                border-radius: 25px;
+                background-color: hsl(0, 52%, 42%);}
+            QPushButton:hover{background-color: hsl(0, 52%, 55%);}
         """)
 
 class transaction_window(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setGeometry(750,350,550,200)
+        self.setGeometry(600,300,800,500)
         self.setWindowTitle("View Transactions")
         self.setWindowIcon(QIcon("INCOME-EXPENSE-tracker\\BankImage.jpg"))
+
+        self.month_Jan = QRadioButton("January", self)
+        self.month_Feb = QRadioButton("February", self)
+        self.month_Mar = QRadioButton("March", self)
+        self.month_Apr = QRadioButton("April", self)
+        self.month_May = QRadioButton("May", self)
+        self.month_Jun = QRadioButton("June", self)
+        self.month_Jul = QRadioButton("July", self)
+        self.month_Aug = QRadioButton("August", self)
+        self.month_Sep = QRadioButton("September", self)
+        self.month_Oct = QRadioButton("October", self)
+        self.month_Nov = QRadioButton("November", self)
+        self.month_Dec = QRadioButton("December", self)
+
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.month_Jan)
+        vbox.addWidget(self.month_Feb)
+        vbox.addWidget(self.month_Mar)
+        vbox.addWidget(self.month_Apr)
+        vbox.addWidget(self.month_May)
+        vbox.addWidget(self.month_Jun)
+        vbox.addWidget(self.month_Jul)
+        vbox.addWidget(self.month_Aug)
+        vbox.addWidget(self.month_Sep)
+        vbox.addWidget(self.month_Oct)
+        vbox.addWidget(self.month_Nov)
+        vbox.addWidget(self.month_Dec)
+
+        central_widget.setLayout(vbox)
+
         self.setStyleSheet("""
             QMainWindow{background-color: hsl(176, 5%, 25%);}
+            QRadioButton{color: hsl(182, 100%, 50%);
+                        font-size: 20px;}
         """)
 
 def main():
