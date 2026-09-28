@@ -1,12 +1,26 @@
 import datetime
 import sys
-from PyQt5.QtWidgets import (QMainWindow, QApplication, QLabel, QPushButton)
+from PyQt5.QtWidgets import (QMainWindow, QApplication, QVBoxLayout,
+                            QLabel, QPushButton, QWidget, QLineEdit)
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt
 
-class widget(QMainWindow):
+class MainWindow(QMainWindow):
+        # Declaring Variables
+
+    total_balance = 0
+    total_income = 0
+    total_expenses = 0
+    float(total_balance)
+    float(total_income)
+    float(total_expenses)
+
     def __init__(self):
         super().__init__()
+        self.incomeWindow = income_window()
+        self.expenseWindow = expense_window()
+        self.transactionsWindow = transaction_window()
+
         self.setWindowTitle("Income-Expense-Tracker")
         self.setWindowIcon(QIcon("INCOME-EXPENSE-tracker\\BankImage.jpg"))
         self.setGeometry(600,150,800,700)
@@ -52,15 +66,6 @@ class widget(QMainWindow):
                                              "color: hsl(32, 100%, 50%);"
                                              "border-radius: 15px;")
         self.acc_summary_label.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-
-        # Declaring Variables
-
-        self.total_balance = 0
-        self.total_income = 0
-        self.total_expenses = 0
-        float(self.total_balance)
-        float(self.total_income)
-        float(self.total_expenses)
 
         # Creating labels below the Account Summary Label
 
@@ -126,9 +131,55 @@ class widget(QMainWindow):
             QPushButton#transactions_button:hover{background-color: hsl(71, 52%, 55%);}
         """)
 
+        self.income_button.clicked.connect(self.add_income)
+        self.expense_button.clicked.connect(self.add_expense)
+        self.transactions_button.clicked.connect(self.view_transactions)
+
+        # Creating functions for signal.connect(slot)
+
+    def add_income(self):
+        self.incomeWindow.show()
+
+    def add_expense(self):
+        self.expenseWindow.show()
+
+    def view_transactions(self):
+        self.transactionsWindow.show()
+        
+class income_window(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setGeometry(750,350,550,200)
+        self.setWindowTitle("Add Income")
+        self.setWindowIcon(QIcon("INCOME-EXPENSE-tracker\\BankImage.jpg"))
+
+        self.setStyleSheet("""
+            QMainWindow{background-color: hsl(176, 5%, 25%);}
+        """)
+
+class expense_window(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setGeometry(750,350,550,200)
+        self.setWindowTitle("Add Expense")
+        self.setWindowIcon(QIcon("INCOME-EXPENSE-tracker\\BankImage.jpg"))
+        self.setStyleSheet("""
+            QMainWindow{background-color: hsl(176, 5%, 25%);}
+        """)
+
+class transaction_window(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setGeometry(750,350,550,200)
+        self.setWindowTitle("View Transactions")
+        self.setWindowIcon(QIcon("INCOME-EXPENSE-tracker\\BankImage.jpg"))
+        self.setStyleSheet("""
+            QMainWindow{background-color: hsl(176, 5%, 25%);}
+        """)
+
 def main():
     app = QApplication(sys.argv)
-    window = widget()
+    window = MainWindow()
     window.show()
     sys.exit(app.exec_())
 
