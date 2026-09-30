@@ -1,7 +1,7 @@
 import datetime
 import sys
 import mysql.connector
-from PyQt5.QtWidgets import (QMainWindow, QApplication, QVBoxLayout, QRadioButton, QHBoxLayout,
+from PyQt5.QtWidgets import (QMainWindow, QApplication, QVBoxLayout, QRadioButton,
                             QLabel, QPushButton, QWidget, QLineEdit)
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt
@@ -88,7 +88,26 @@ class MainWindow(QMainWindow):
         self.total_expenses.setStyleSheet("color: hsl(0, 100%, 62%);" 
                                         "font-weight: Bold;" 
                                         "font-size: 19px;")
+        
+        # Showing 5 transactions
+        mydb = mysql.connector.connect(host = "LocalHost",
+                                    user = "root",
+                                    password = "MAHSKAS@Hell99",
+                                    database = "income_expense_tracker")
+        
+        my_cursor = mydb.cursor()
+        
+        sql = "SELECT Date_, Description_, Type_, Amount_ " \
+        "FROM transactions ORDER BY ID DESC LIMIT 5;"
 
+        my_cursor.execute(sql)
+        results = my_cursor.fetchall()
+
+        for result in results:
+            print()
+            for individual in result:
+                print(f"\t{individual}", end="  ")
+        
         # Creating the quick Actions Sections
         self.quick_action_label = QLabel("⚡ Quick Actions",self)
         self.quick_action_label.setGeometry(500,100,250,40)
