@@ -104,10 +104,18 @@ class MainWindow(QMainWindow):
         results = my_cursor.fetchall()
 
         for result in results:
-            print()
-            for individual in result:
-                print(f"\t{individual}", end="  ")
-        
+            for index, individual in enumerate(result):
+                if index == 3:
+                    print(f"{individual:<20}")
+                elif index == 2:
+                    print(f"{individual:<20}", end =" ")         
+                elif index == 1:
+                    print(f"{individual:<20}", end =" ")
+                elif index == 0:
+                    print(f"{individual}", end=" ")
+                else:
+                    pass
+                    
         # Creating the quick Actions Sections
         self.quick_action_label = QLabel("⚡ Quick Actions",self)
         self.quick_action_label.setGeometry(500,100,250,40)
