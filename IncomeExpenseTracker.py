@@ -146,6 +146,10 @@ class MainWindow(QMainWindow):
         self.incomeWindow.show()
 
     def add_expense(self):
+        self.expenseWindow.expenseButtonEW.setDisabled(False)
+        self.expenseWindow.expenseButtonEW.setText("Add Expense")
+        self.expenseWindow.expense_description.clear()
+        self.expenseWindow.expense_amount.clear()
         self.expenseWindow.show()
 
     def view_transactions(self):
@@ -251,6 +255,8 @@ class expense_window(QMainWindow):
         self.expense_description.setPlaceholderText("Add expense Description here")
         self.expense_amount = QLineEdit()
         self.expense_amount.setPlaceholderText("$ Add expense Amount here")
+        self.error_label = QLabel("*********** NO  ERRORS **********",self)
+        self.error_label.setAlignment(Qt.AlignCenter)
         self.expenseButtonEW = QPushButton("Add Expense",self)
 
         # Adding vertical layout manager to the expense_window
@@ -259,6 +265,7 @@ class expense_window(QMainWindow):
         vbox = QVBoxLayout()
         vbox.addWidget(self.expense_description)
         vbox.addWidget(self.expense_amount)
+        vbox.addWidget(self.error_label)
         vbox.addWidget(self.expenseButtonEW)
         
         central_widget.setLayout(vbox)
@@ -267,6 +274,7 @@ class expense_window(QMainWindow):
             QMainWindow{background-color: hsl(176, 5%, 25%);}
             QLineEdit{font-size: 20px;}
             QLineEdit:focus{background-color: hsl(217, 6%, 65%)}
+            QLabel{font-size: 20px;}
             QPushButton{font-size: 20px;
                 font-weight: Bold;
                 border: 2px solid;
@@ -275,6 +283,55 @@ class expense_window(QMainWindow):
                 background-color: hsl(0, 52%, 42%);}
             QPushButton:hover{background-color: hsl(0, 52%, 55%);}
         """)
+
+        self.expenseButtonEW.clicked.connect(self.expense_sql)
+
+    def expense_sql(self):
+            desc = self.expense_description.text()
+            amt = self.expense_amount.text()
+    
+            try:
+                if len(desc) < 3:
+                    self.error_label.setText("Error: Make Description > 3 chars!")
+                    self.error_label.setStyleSheet("color: hsl(0, 100%, 62%);" \
+                                "font-weight: Bold;")
+    
+                elif len(amt) == 0:
+                    self.error_label.setText("Error: Please enter an amount!")
+                    self.error_label.setStyleSheet("color: hsl(0, 100%, 62%);" \
+                                "font-weight: Bold;")
+    
+                elif float(amt) == 0:
+                    self.error_label.setText("Error: Expense cannot be zero!")
+                    self.error_label.setStyleSheet("color: hsl(0, 100%, 62%);" \
+                                    "font-weight: Bold;")
+    
+                else:
+                    self.error_label.setText("*********** NO  ERRORS **********")
+                    self.error_label.setStyleSheet("color: Black;" \
+                    "font-weight: Normal;")
+                    mydb = mysql.connector.connect(host = "LocalHost",
+                                                    user = "root",
+                                                    password = "MAHSKAS@Hell99",
+                                                    database = "income_expense_tracker")
+    
+                    my_cursor = mydb.cursor()
+    
+                    sql = "INSERT INTO transactions(Date_,Description_,Type_,Amount_) " \
+                                "VALUES(CURRENT_DATE(),%s,%s,%s);"
+                    values = (desc,"Expense",amt)
+    
+                    my_cursor.execute(sql,values)
+                    mydb.commit()
+    
+                    self.expenseButtonEW.setText("Expense Added!")
+                    self.expenseButtonEW.setDisabled(True)
+                    self.expenseButtonEW.setStyleSheet("color: Black;")
+    
+            except ValueError:
+                self.error_label.setText("Error: Enter a Float or Int number!")
+                self.error_label.setStyleSheet("color: hsl(0, 100%, 62%);" \
+                                                "font-weight: Bold;")
 
 class transaction_window(QMainWindow):
     def __init__(self):
