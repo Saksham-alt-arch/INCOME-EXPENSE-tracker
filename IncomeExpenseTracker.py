@@ -143,6 +143,9 @@ class MainWindow(QMainWindow):
         self.incomeWindow.incomeButtonIW.setText("Add Income")
         self.incomeWindow.income_description.clear()
         self.incomeWindow.income_amount.clear()
+        self.incomeWindow.error_label.setText("*********** NO  ERRORS **********")
+        self.incomeWindow.error_label.setStyleSheet("color: Black;" \
+                            "font-weight: Normal;")
         self.incomeWindow.show()
 
     def add_expense(self):
@@ -150,6 +153,9 @@ class MainWindow(QMainWindow):
         self.expenseWindow.expenseButtonEW.setText("Add Expense")
         self.expenseWindow.expense_description.clear()
         self.expenseWindow.expense_amount.clear()
+        self.expenseWindow.error_label.setText("*********** NO  ERRORS **********")
+        self.expenseWindow.error_label.setStyleSheet("color: Black;" \
+                            "font-weight: Normal;")
         self.expenseWindow.show()
 
     def view_transactions(self):
@@ -318,7 +324,7 @@ class expense_window(QMainWindow):
                     my_cursor = mydb.cursor()
     
                     sql = "INSERT INTO transactions(Date_,Description_,Type_,Amount_) " \
-                                "VALUES(CURRENT_DATE(),%s,%s,%s);"
+                                "VALUES(CURRENT_DATE(),%s,%s,-%s);"
                     values = (desc,"Expense",amt)
     
                     my_cursor.execute(sql,values)
