@@ -24,7 +24,7 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("Income-Expense-Tracker")
         self.setWindowIcon(QIcon("INCOME-EXPENSE-tracker\\BankImage.jpg"))
-        self.setGeometry(600,150,800,700)
+        self.setGeometry(600,150,800,550)
         self.initUI()
 
     def initUI(self):
@@ -88,8 +88,27 @@ class MainWindow(QMainWindow):
         self.total_expenses.setStyleSheet("color: hsl(0, 100%, 62%);" 
                                         "font-weight: Bold;" 
                                         "font-size: 19px;")
-        
-        # Showing 5 transactions
+
+        self.recent5tranactions = QLabel("Recent 5 Transactions 📇",self)
+        self.recent5tranactions.setGeometry(26,305,270,50)
+        self.recent5tranactions.setStyleSheet("font-weight: Bold;"
+                                              "font-size: 20px;"
+                                              "color: hsl(198, 100%, 81%);")
+
+        self.transactions5 = QLabel(self)
+        self.transactions5.setGeometry(26,370,750,175)
+        self.transactions5.setStyleSheet("font-size: 20px;"
+                                         "color: hsl(239, 100%, 90%);")
+        self.transactions5.setAlignment(Qt.AlignTop)
+
+        self.recent5description = QLabel("     DATE\t\tDESCRIPTION \t\t    TYPE  \t      $AMOUNT",self)
+        self.recent5description.setGeometry(26,345,750,50)
+        self.recent5description.setStyleSheet("font-weight: Bold;"
+                                               "font-size: 20px;"
+                                                "color: hsl(54, 100%, 50%);")
+        self.recent5tranactions.setAlignment(Qt.AlignCenter)
+
+        # Showing 5 most recent transactions
         mydb = mysql.connector.connect(host = "LocalHost",
                                     user = "root",
                                     password = "MAHSKAS@Hell99",
@@ -102,20 +121,22 @@ class MainWindow(QMainWindow):
 
         my_cursor.execute(sql)
         results = my_cursor.fetchall()
-
+        output = ""
         for result in results:
+            output += "\n"
             for index, individual in enumerate(result):
-                if index == 3:
-                    print(f"{individual:<20}")
-                elif index == 2:
-                    print(f"{individual:<20}", end =" ")         
-                elif index == 1:
-                    print(f"{individual:<20}", end =" ")
-                elif index == 0:
-                    print(f"{individual}", end=" ")
-                else:
-                    pass
-                    
+                    if index == 0:
+                        output += f"{individual}"
+                    elif index == 1:
+                        output += f"\t{individual:<25}"
+                    elif index == 2:
+                        output += f"{individual:>25}"
+                    elif index == 3:
+                        output += f"{individual:>20}"
+                    else: 
+                        pass
+        self.transactions5.setText(output)
+
         # Creating the quick Actions Sections
         self.quick_action_label = QLabel("⚡ Quick Actions",self)
         self.quick_action_label.setGeometry(500,100,250,40)
