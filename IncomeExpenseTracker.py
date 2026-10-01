@@ -1,6 +1,6 @@
 import datetime
 import sys
-import mysql.connector
+from Sqlconnect import mydb
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QVBoxLayout, QRadioButton,
                             QLabel, QPushButton, QWidget, QLineEdit)
 from PyQt5.QtGui import QIcon, QPixmap
@@ -111,13 +111,7 @@ class MainWindow(QMainWindow):
         self.recent5tranactions.setAlignment(Qt.AlignCenter)
 
         # Showing 5 most recent transactions
-        mydb = mysql.connector.connect(host = "LocalHost",
-                                    user = "root",
-                                    password = "MAHSKAS@Hell99",
-                                    database = "income_expense_tracker")
-        
         my_cursor = mydb.cursor()
-        
         sql = "SELECT Date_, Description_, Type_, Amount_ " \
         "FROM transactions ORDER BY ID DESC LIMIT 5;"
 
@@ -277,13 +271,8 @@ class income_window(QMainWindow):
                 self.error_label.setText("*********** NO  ERRORS **********")
                 self.error_label.setStyleSheet("color: Black;" \
                 "font-weight: Normal;")
-                mydb = mysql.connector.connect(host = "LocalHost",
-                                                user = "root",
-                                                password = "MAHSKAS@Hell99",
-                                                database = "income_expense_tracker")
 
                 my_cursor = mydb.cursor()
-
                 sql = "INSERT INTO transactions(Date_,Description_,Type_,Amount_) " \
                             "VALUES(CURRENT_DATE(),%s,%s,%s);"
                 values = (desc,"Income",amt)
@@ -366,13 +355,8 @@ class expense_window(QMainWindow):
                     self.error_label.setText("*********** NO  ERRORS **********")
                     self.error_label.setStyleSheet("color: Black;" \
                     "font-weight: Normal;")
-                    mydb = mysql.connector.connect(host = "LocalHost",
-                                                    user = "root",
-                                                    password = "MAHSKAS@Hell99",
-                                                    database = "income_expense_tracker")
     
                     my_cursor = mydb.cursor()
-    
                     sql = "INSERT INTO transactions(Date_,Description_,Type_,Amount_) " \
                                 "VALUES(CURRENT_DATE(),%s,%s,-%s);"
                     values = (desc,"Expense",amt)
