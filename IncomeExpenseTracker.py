@@ -98,7 +98,9 @@ class MainWindow(QMainWindow):
         self.transactions5 = QLabel(self)
         self.transactions5.setGeometry(26,370,750,175)
         self.transactions5.setStyleSheet("font-size: 20px;"
-                                         "color: hsl(239, 100%, 90%);")
+                                         "color: hsl(239, 100%, 90%);" \
+                                         "font-family: Consolas;")
+        
         self.transactions5.setAlignment(Qt.AlignTop)
 
         self.recent5description = QLabel("     DATE\t\tDESCRIPTION \t\t    TYPE  \t      $AMOUNT",self)
@@ -130,9 +132,9 @@ class MainWindow(QMainWindow):
                     elif index == 1:
                         output += f"\t{individual:<25}"
                     elif index == 2:
-                        output += f"{individual:>25}"
+                        output += f"   {individual}"
                     elif index == 3:
-                        output += f"{individual:>20}"
+                        output += f"   {individual:>10}"
                     else: 
                         pass
         self.transactions5.setText(output)
