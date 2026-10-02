@@ -7,14 +7,26 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt
 
 class MainWindow(QMainWindow):
-        # Declaring Variables
+    # Declaring Variables
+    sql_balance = "SELECT Balance FROM total_balance;"
 
-    total_balance = 0
-    total_income = 0
-    total_expenses = 0
-    float(total_balance)
-    float(total_income)
-    float(total_expenses)
+    my_cursor = mydb.cursor()
+    my_cursor.execute(sql_balance)
+    total_balances = my_cursor.fetchone()
+    for output in total_balances:
+        total_balance = output
+
+    sql_income = "SELECT amount FROM total_income;"
+    my_cursor.execute(sql_income)
+    total_incomes = my_cursor.fetchone()
+    for output_inc in total_incomes:
+        total_income = output_inc
+
+    sql_expense = "SELECT amount FROM total_expense;"
+    my_cursor.execute(sql_expense)
+    total_expenses = my_cursor.fetchone()
+    for output_exp in total_expenses:
+        total_expense = output_exp
 
     def __init__(self):
         super().__init__()
@@ -69,21 +81,20 @@ class MainWindow(QMainWindow):
         self.acc_summary_label.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 
         # Creating labels below the Account Summary Label
-
-        self.total_balance_label = QLabel(f"Total Balance: $ {self.total_balance:,.2f}",self)
+        self.total_balance_label = QLabel(f"Total Balance: $ {self.total_balance}",self)
         self.total_balance_label.setGeometry(20,140,400,70)
         self.total_balance_label.setStyleSheet("color: hsl(153, 100%, 50%);"
                                                "font-weight: Bold;" 
                                                "font-size: 23px;"
                                                "border: 2px solid;")
         
-        self.total_income = QLabel(f"Total Income: $ {self.total_income:,.2f}",self)
+        self.total_income = QLabel(f"Total Income: $ {self.total_income}",self)
         self.total_income.setGeometry(26,202,390,47)
         self.total_income.setStyleSheet("color: hsl(113, 100%, 50%);"
                                         "font-weight: Bold;" 
                                         "font-size: 19px;")
         
-        self.total_expenses = QLabel(f"Total Expenses: $ {self.total_expenses:,.2f}",self)
+        self.total_expenses = QLabel(f"Total Expenses: $ {self.total_expense}",self)
         self.total_expenses.setGeometry(26,245,390,50)
         self.total_expenses.setStyleSheet("color: hsl(0, 100%, 62%);" 
                                         "font-weight: Bold;" 
@@ -204,91 +215,91 @@ class MainWindow(QMainWindow):
 
     def view_transactions(self):
         self.transactionsWindow.show()
-        
+
 class income_window(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setGeometry(800,350,400,200)
-        self.setWindowTitle("Add Income")
-        self.setWindowIcon(QIcon("INCOME-EXPENSE-tracker\\BankImage.jpg"))
+        def __init__(self):
+            super().__init__()
+            self.setGeometry(800,350,400,200)
+            self.setWindowTitle("Add Income")
+            self.setWindowIcon(QIcon("INCOME-EXPENSE-tracker\\BankImage.jpg"))
 
-        self.income_description = QLineEdit()
-        self.income_description.setPlaceholderText("Add income Description here")
-        self.income_amount = QLineEdit()
-        self.income_amount.setPlaceholderText("$ Add income Amount here")
-        self.error_label = QLabel("*********** NO  ERRORS **********",self)
-        self.error_label.setAlignment(Qt.AlignCenter)
-        self.incomeButtonIW = QPushButton("Add Income",self)
+            self.income_description = QLineEdit()
+            self.income_description.setPlaceholderText("Add income Description here")
+            self.income_amount = QLineEdit()
+            self.income_amount.setPlaceholderText("$ Add income Amount here")
+            self.error_label = QLabel("*********** NO  ERRORS **********",self)
+            self.error_label.setAlignment(Qt.AlignCenter)
+            self.incomeButtonIW = QPushButton("Add Income",self)
 
-        # Adding vertical layout manager to the income_window
-        central_widget = QWidget()
-        self.setCentralWidget(central_widget)
-        vbox = QVBoxLayout()
-        vbox.addWidget(self.income_description)
-        vbox.addWidget(self.income_amount)
-        vbox.addWidget(self.error_label)
-        vbox.addWidget(self.incomeButtonIW)
+            # Adding vertical layout manager to the income_window
+            central_widget = QWidget()
+            self.setCentralWidget(central_widget)
+            vbox = QVBoxLayout()
+            vbox.addWidget(self.income_description)
+            vbox.addWidget(self.income_amount)
+            vbox.addWidget(self.error_label)
+            vbox.addWidget(self.incomeButtonIW)
 
-        central_widget.setLayout(vbox)
-        
-        self.setStyleSheet("""
-            QMainWindow{background-color: hsl(176, 5%, 25%);}
-            QLineEdit{font-size: 20px;}
-            QLineEdit:focus{background-color: hsl(217, 6%, 65%)}
-            QLabel{font-size: 20px;}
-            QPushButton{font-size: 20px;
-                font-weight: Bold;
-                border: 2px solid;
-                padding: 15px 30px;
-                border-radius: 25px;
-                background-color: hsl(118, 54%, 43%);}
-            QPushButton:hover{background-color: hsl(118, 54%, 55%);}
-        """)
+            central_widget.setLayout(vbox)
+            
+            self.setStyleSheet("""
+                QMainWindow{background-color: hsl(176, 5%, 25%);}
+                QLineEdit{font-size: 20px;}
+                QLineEdit:focus{background-color: hsl(217, 6%, 65%)}
+                QLabel{font-size: 20px;}
+                QPushButton{font-size: 20px;
+                    font-weight: Bold;
+                    border: 2px solid;
+                    padding: 15px 30px;
+                    border-radius: 25px;
+                    background-color: hsl(118, 54%, 43%);}
+                QPushButton:hover{background-color: hsl(118, 54%, 55%);}
+            """)
 
-        self.incomeButtonIW.clicked.connect(self.income_sql)
+            self.incomeButtonIW.clicked.connect(self.income_sql)
 
-    def income_sql(self):
-        desc = self.income_description.text()
-        amt = self.income_amount.text()
+        def income_sql(self):
+            desc = self.income_description.text()
+            amt = self.income_amount.text()
 
-        try:
-            if len(desc) < 3:
-                self.error_label.setText("Error: Make Description > 3 chars!")
-                self.error_label.setStyleSheet("color: hsl(0, 100%, 62%);" \
-                            "font-weight: Bold;")
-
-            elif len(amt) == 0:
-                self.error_label.setText("Error: Please enter an amount!")
-                self.error_label.setStyleSheet("color: hsl(0, 100%, 62%);" \
-                            "font-weight: Bold;")
-
-            elif float(amt) == 0:
-                self.error_label.setText("Error: Income cannot be zero!")
-                self.error_label.setStyleSheet("color: hsl(0, 100%, 62%);" \
+            try:
+                if len(desc) < 3:
+                    self.error_label.setText("Error: Make Description > 3 chars!")
+                    self.error_label.setStyleSheet("color: hsl(0, 100%, 62%);" \
                                 "font-weight: Bold;")
 
-            else:
-                self.error_label.setText("*********** NO  ERRORS **********")
-                self.error_label.setStyleSheet("color: Black;" \
-                "font-weight: Normal;")
+                elif len(amt) == 0:
+                    self.error_label.setText("Error: Please enter an amount!")
+                    self.error_label.setStyleSheet("color: hsl(0, 100%, 62%);" \
+                                "font-weight: Bold;")
 
-                my_cursor = mydb.cursor()
-                sql = "INSERT INTO transactions(Date_,Description_,Type_,Amount_) " \
-                            "VALUES(CURRENT_DATE(),%s,%s,%s);"
-                values = (desc,"Income",amt)
+                elif float(amt) == 0:
+                    self.error_label.setText("Error: Income cannot be zero!")
+                    self.error_label.setStyleSheet("color: hsl(0, 100%, 62%);" \
+                                    "font-weight: Bold;")
 
-                my_cursor.execute(sql,values)
-                mydb.commit()
+                else:
+                    self.error_label.setText("*********** NO  ERRORS **********")
+                    self.error_label.setStyleSheet("color: Black;" \
+                    "font-weight: Normal;")
 
-                self.incomeButtonIW.setText("Income Added!")
-                self.incomeButtonIW.setDisabled(True)
-                self.incomeButtonIW.setStyleSheet("color: Black;")
+                    my_cursor = mydb.cursor()
+                    sql = "INSERT INTO transactions(Date_,Description_,Type_,Amount_) " \
+                                "VALUES(CURRENT_DATE(),%s,%s,%s);"
+                    values = (desc,"Income",amt)
 
-        except ValueError:
-            self.error_label.setText("Error: Enter a Float or Int number!")
-            self.error_label.setStyleSheet("color: hsl(0, 100%, 62%);" \
-                                            "font-weight: Bold;")
+                    my_cursor.execute(sql,values)
+                    mydb.commit()
 
+                    self.incomeButtonIW.setText("Income Added!")
+                    self.incomeButtonIW.setDisabled(True)
+                    self.incomeButtonIW.setStyleSheet("color: Black;")
+
+            except ValueError:
+                self.error_label.setText("Error: Enter a Float or Int number!")
+                self.error_label.setStyleSheet("color: hsl(0, 100%, 62%);" \
+                                                "font-weight: Bold;")
+                
 class expense_window(QMainWindow):
     def __init__(self):
         super().__init__()
