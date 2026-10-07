@@ -7,39 +7,71 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt
 
 class MainWindow(QMainWindow):
-    # Declaring Variables
-    sql_balance = "SELECT Balance FROM total_balance;"
-
-    my_cursor = mydb.cursor()
-    my_cursor.execute(sql_balance)
-    total_balances = my_cursor.fetchone()
-    for output in total_balances:
-        total_balance = output
-
-    sql_income = "SELECT amount FROM total_income;"
-    my_cursor.execute(sql_income)
-    total_incomes = my_cursor.fetchone()
-    for output_inc in total_incomes:
-        total_income = output_inc
-
-    sql_expense = "SELECT amount FROM total_expense;"
-    my_cursor.execute(sql_expense)
-    total_expenses = my_cursor.fetchone()
-    for output_exp in total_expenses:
-        total_expense = output_exp
-
+                    
     def __init__(self):
         super().__init__()
         self.incomeWindow = income_window()
         self.expenseWindow = expense_window()
         self.transactionsWindow = transaction_window()
-
         self.setWindowTitle("Income-Expense-Tracker")
         self.setWindowIcon(QIcon("INCOME-EXPENSE-tracker\\BankImage.jpg"))
         self.setGeometry(600,150,800,550)
         self.initUI()
 
+    # Declaring Variables and setting functions
+    def total_balance(self):
+        sql_balance = "SELECT Balance FROM total_balance;"
+        my_cursor = mydb.cursor()
+        my_cursor.execute(sql_balance)
+        total_balances = my_cursor.fetchone()
+        for output in total_balances:
+            total_balance = output
+            return total_balance
+
+    def total_income_(self):
+        sql_income = "SELECT amount FROM total_income;"
+        my_cursor = mydb.cursor()
+        my_cursor.execute(sql_income)
+        total_incomes = my_cursor.fetchone()
+        for output_inc in total_incomes:
+            total_income = output_inc
+            return total_income
+
+    def total_expense(self):     
+        sql_expense = "SELECT amount FROM total_expense;"
+        my_cursor = mydb.cursor()
+        my_cursor.execute(sql_expense)
+        total_expenses = my_cursor.fetchone()
+        for output_exp in total_expenses:
+            total_expense = output_exp
+            return total_expense
+
+    def output(self):
+        # Showing 5 most recent transactions
+        my_cursor = mydb.cursor()
+        sql = "SELECT Date_, Description_, Type_, Amount_ " \
+        "FROM transactions ORDER BY ID DESC LIMIT 5;"
+
+        my_cursor.execute(sql)
+        results = my_cursor.fetchall()
+        output = ""
+        for result in results:
+            output += "\n"
+            for index, individual in enumerate(result):
+                    if index == 0:
+                        output += f"{individual}"
+                    elif index == 1:
+                        output += f"\t{individual:<25}"
+                    elif index == 2:
+                        output += f"   {individual}"
+                    elif index == 3:
+                        output += f"   {individual:>10}"
+                    else: 
+                        pass
+        return output
+
     def initUI(self):
+                    
         # Top label
         self.top_label = QLabel("INCOME - EXPENSE - TRACKER\nTrack 🌻  Manage  🌻  Grow",self)
         self.top_label.setGeometry(250,0,300,45)
@@ -81,20 +113,20 @@ class MainWindow(QMainWindow):
         self.acc_summary_label.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 
         # Creating labels below the Account Summary Label
-        self.total_balance_label = QLabel(f"Total Balance: $ {self.total_balance}",self)
+        self.total_balance_label = QLabel(f"Total Balance: $ {self.total_balance()}",self)
         self.total_balance_label.setGeometry(20,140,400,70)
         self.total_balance_label.setStyleSheet("color: hsl(153, 100%, 50%);"
                                                "font-weight: Bold;" 
                                                "font-size: 23px;"
                                                "border: 2px solid;")
         
-        self.total_income = QLabel(f"Total Income: $ {self.total_income}",self)
+        self.total_income = QLabel(f"Total Income: $ {self.total_income_()}",self)
         self.total_income.setGeometry(26,202,390,47)
         self.total_income.setStyleSheet("color: hsl(113, 100%, 50%);"
                                         "font-weight: Bold;" 
                                         "font-size: 19px;")
         
-        self.total_expenses = QLabel(f"Total Expenses: $ {self.total_expense}",self)
+        self.total_expenses = QLabel(f"Total Expenses: $ {self.total_expense()}",self)
         self.total_expenses.setGeometry(26,245,390,50)
         self.total_expenses.setStyleSheet("color: hsl(0, 100%, 62%);" 
                                         "font-weight: Bold;" 
@@ -120,29 +152,7 @@ class MainWindow(QMainWindow):
                                                "font-size: 20px;"
                                                 "color: hsl(54, 100%, 50%);")
         self.recent5tranactions.setAlignment(Qt.AlignCenter)
-
-        # Showing 5 most recent transactions
-        my_cursor = mydb.cursor()
-        sql = "SELECT Date_, Description_, Type_, Amount_ " \
-        "FROM transactions ORDER BY ID DESC LIMIT 5;"
-
-        my_cursor.execute(sql)
-        results = my_cursor.fetchall()
-        output = ""
-        for result in results:
-            output += "\n"
-            for index, individual in enumerate(result):
-                    if index == 0:
-                        output += f"{individual}"
-                    elif index == 1:
-                        output += f"\t{individual:<25}"
-                    elif index == 2:
-                        output += f"   {individual}"
-                    elif index == 3:
-                        output += f"   {individual:>10}"
-                    else: 
-                        pass
-        self.transactions5.setText(output)
+        self.transactions5.setText(self.output())
 
         # Creating the quick Actions Sections
         self.quick_action_label = QLabel("⚡ Quick Actions",self)
