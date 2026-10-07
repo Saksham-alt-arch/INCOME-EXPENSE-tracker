@@ -464,6 +464,48 @@ class transaction_window(QMainWindow):
             QLabel#balanceincomeexpense{border: 1px solid;}
         """)
 
+        self.month_Jan.toggled.connect(self.monthlyTransactions)
+        self.month_Feb.toggled.connect(self.monthlyTransactions)
+        self.month_Mar.toggled.connect(self.monthlyTransactions)
+        self.month_Apr.toggled.connect(self.monthlyTransactions)
+        self.month_May.toggled.connect(self.monthlyTransactions)
+        self.month_Jun.toggled.connect(self.monthlyTransactions)
+        self.month_Jul.toggled.connect(self.monthlyTransactions)
+        self.month_Aug.toggled.connect(self.monthlyTransactions)
+        self.month_Sep.toggled.connect(self.monthlyTransactions)
+        self.month_Oct.toggled.connect(self.monthlyTransactions)
+        self.month_Nov.toggled.connect(self.monthlyTransactions)
+        self.month_Dec.toggled.connect(self.monthlyTransactions)
+
+    def monthlyTransactions(self):
+        radio_button = self.sender()
+        if self.month_Jan.isChecked():
+            self.month_Jan.text()
+        elif self.month_Feb.isChecked():
+            print("Printed Febuary")
+        elif self.month_Mar.isChecked():
+            print("Printed March")
+        elif self.month_Apr.isChecked():
+            print("Printed April")
+        elif self.month_May.isChecked():
+            print("Printed May")
+        elif self.month_Jun.isChecked():
+            print("Printed June")             
+        elif self.month_Jul.isChecked():
+            print("Printed July")
+        elif self.month_Aug.isChecked():
+            print("Printed August")
+        elif self.month_Sep.isChecked():
+            print("Printed September")
+        elif self.month_Oct.isChecked():
+            print("Printed October")
+        elif self.month_Nov.isChecked():
+            print("Printed November")
+        elif self.month_Dec.isChecked():
+            print("Printed December")
+        else:
+             pass
+
 def main():
     app = QApplication(sys.argv)
     window = MainWindow()
