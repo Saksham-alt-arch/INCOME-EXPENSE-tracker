@@ -443,8 +443,12 @@ class transaction_window(QMainWindow):
 
         self.transactionsformonth = QLabel("⭐Transactions for this Month⭐",self)
         self.transactionsformonth.setGeometry(380,15,370,40)
+        self.recent5description = QLabel("     DATE\t\tDESCRIPTION \t\t    TYPE  \t      $AMOUNT",self)
+        self.recent5description.setGeometry(175,45,750,50)
+        
         self.showingAllTransactions = QLabel(self)
         self.showingAllTransactions.setGeometry(175,55,750,325)
+        self.showingAllTransactions.setAlignment(Qt.AlignTop)
 
         self.balanceincomeexpense = QLabel(self)
         self.balanceincomeexpense.setGeometry(370,385,370,100)
@@ -452,6 +456,7 @@ class transaction_window(QMainWindow):
         self.transactionsformonth.setObjectName("transactionsformonth")
         self.showingAllTransactions.setObjectName("showingAllTransactions")
         self.balanceincomeexpense.setObjectName("balanceincomeexpense")
+        self.recent5description.setObjectName("recent5description")
 
         self.setStyleSheet("""
             QMainWindow{background-color: hsl(176, 5%, 25%);}
@@ -459,8 +464,14 @@ class transaction_window(QMainWindow):
                         font-size: 20px;}
             QLabel#transactionsformonth{font-size: 20px;
                                         font-weight: Bold;
-                                        color:hsl(40, 91%, 66%)}
-            QLabel#showingAllTransactions{border: 1px solid;}
+                                        color:hsl(40, 91%, 66%);}
+            QLabel#recent5description{color: hsl(54, 100%, 50%);
+                                      font-size: 20px;
+                                      font-weight: Bold;}
+            QLabel#showingAllTransactions{border: 1px solid;
+                                          font-family: Consolas;
+                                          font-size: 20px;
+                                          color: hsl(239, 100%, 90%);}
             QLabel#balanceincomeexpense{border: 1px solid;}
         """)
 
@@ -477,33 +488,76 @@ class transaction_window(QMainWindow):
         self.month_Nov.toggled.connect(self.monthlyTransactions)
         self.month_Dec.toggled.connect(self.monthlyTransactions)
 
+    def sql_connect(self, values):
+         #Showing all transactions for that particular month
+        sql = "SELECT Date_, Description_, Type_, Amount_ " \
+              "FROM transactions WHERE Date_ LIKE %s ORDER BY ID DESC;"
+        
+        my_cursor = mydb.cursor()
+        my_cursor.execute(sql, values)
+        results = my_cursor.fetchall()
+
+        output = ""
+        for result in results:
+            output += "\n"
+            for index, individual in enumerate(result):
+                    if index == 0:
+                        output += f"{individual}"
+                    elif index == 1:
+                        output += f"\t{individual:<25}"
+                    elif index == 2:
+                        output += f"   {individual}"
+                    elif index == 3:
+                        output += f"   {individual:>10}"
+                    else: 
+                        pass
+        if output == "":
+            self.showingAllTransactions.setText("No Transactions for this Month")
+            self.showingAllTransactions.setAlignment(Qt.AlignCenter)
+        else:
+            self.showingAllTransactions.setText(output)
+            self.showingAllTransactions.setAlignment(Qt.AlignTop)
+
+
     def monthlyTransactions(self):
         radio_button = self.sender()
 
         if radio_button.isChecked() and self.month_Jan.isChecked():
-            print("january")
+            values = ("202_-01-%",)
+            self.sql_connect(values)
         elif radio_button.isChecked() and self.month_Feb.isChecked():
-            print("febuary")
+            values = ("202_-02-%",)
+            self.sql_connect(values)
         elif radio_button.isChecked() and self.month_Mar.isChecked():
-            print("march")
+            values = ("202_-03-%",)
+            self.sql_connect(values)
         elif radio_button.isChecked() and self.month_Apr.isChecked():
-            print("april")
+            values = ("202_-04-%",)
+            self.sql_connect(values)
         elif radio_button.isChecked() and self.month_May.isChecked():
-            print("may")
+            values = ("202_-05-%",)
+            self.sql_connect(values)
         elif radio_button.isChecked() and self.month_Jun.isChecked():
-            print("june")
+            values = ("202_-06-%",)
+            self.sql_connect(values)
         elif radio_button.isChecked() and self.month_Jul.isChecked():
-            print("july")
+            values = ("202_-07-%",)
+            self.sql_connect(values)
         elif radio_button.isChecked() and self.month_Aug.isChecked():
-            print("August")
+            values = ("202_-08-%",)
+            self.sql_connect(values)
         elif radio_button.isChecked() and self.month_Sep.isChecked():
-            print("September")
+            values = ("202_-09-%",)
+            self.sql_connect(values)
         elif radio_button.isChecked() and self.month_Oct.isChecked():
-            print("October")
+            values = ("202_-10-%",)
+            self.sql_connect(values)
         elif radio_button.isChecked() and self.month_Nov.isChecked():
-            print("November")
+            values = ("202_-11-%",)
+            self.sql_connect(values)
         elif radio_button.isChecked() and self.month_Dec.isChecked():
-            print("December")
+            values = ("202_-12-%",)
+            self.sql_connect(values)
         else: 
             pass
  
