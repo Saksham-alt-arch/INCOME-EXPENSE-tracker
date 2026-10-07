@@ -405,7 +405,7 @@ class transaction_window(QMainWindow):
     def __init__(self, window):
         super().__init__()
         self.window = window
-        self.setGeometry(600,300,800,500)
+        self.setGeometry(600,300,935,500)
         self.setWindowTitle("View Transactions")
         self.setWindowIcon(QIcon("INCOME-EXPENSE-tracker\\BankImage.jpg"))
 
@@ -441,10 +441,27 @@ class transaction_window(QMainWindow):
 
         central_widget.setLayout(vbox)
 
+        self.transactionsformonth = QLabel("⭐Transactions for this Month⭐",self)
+        self.transactionsformonth.setGeometry(380,15,370,40)
+        self.showingAllTransactions = QLabel(self)
+        self.showingAllTransactions.setGeometry(175,55,750,325)
+
+        self.balanceincomeexpense = QLabel(self)
+        self.balanceincomeexpense.setGeometry(370,385,370,100)
+
+        self.transactionsformonth.setObjectName("transactionsformonth")
+        self.showingAllTransactions.setObjectName("showingAllTransactions")
+        self.balanceincomeexpense.setObjectName("balanceincomeexpense")
+
         self.setStyleSheet("""
             QMainWindow{background-color: hsl(176, 5%, 25%);}
             QRadioButton{color: hsl(182, 100%, 50%);
                         font-size: 20px;}
+            QLabel#transactionsformonth{font-size: 20px;
+                                        font-weight: Bold;
+                                        color:hsl(40, 91%, 66%)}
+            QLabel#showingAllTransactions{border: 1px solid;}
+            QLabel#balanceincomeexpense{border: 1px solid;}
         """)
 
 def main():
