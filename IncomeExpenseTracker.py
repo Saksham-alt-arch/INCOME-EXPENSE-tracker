@@ -10,9 +10,9 @@ class MainWindow(QMainWindow):
                     
     def __init__(self):
         super().__init__()
-        self.incomeWindow = income_window()
-        self.expenseWindow = expense_window()
-        self.transactionsWindow = transaction_window()
+        self.incomeWindow = income_window(self)
+        self.expenseWindow = expense_window(self)
+        self.transactionsWindow = transaction_window(self)
         self.setWindowTitle("Income-Expense-Tracker")
         self.setWindowIcon(QIcon("INCOME-EXPENSE-tracker\\BankImage.jpg"))
         self.setGeometry(600,150,800,550)
@@ -152,6 +152,7 @@ class MainWindow(QMainWindow):
                                                "font-size: 20px;"
                                                 "color: hsl(54, 100%, 50%);")
         self.recent5tranactions.setAlignment(Qt.AlignCenter)
+
         self.transactions5.setText(self.output())
 
         # Creating the quick Actions Sections
@@ -227,8 +228,9 @@ class MainWindow(QMainWindow):
         self.transactionsWindow.show()
 
 class income_window(QMainWindow):
-        def __init__(self):
+        def __init__(self, window):
             super().__init__()
+            self.window = window
             self.setGeometry(800,350,400,200)
             self.setWindowTitle("Add Income")
             self.setWindowIcon(QIcon("INCOME-EXPENSE-tracker\\BankImage.jpg"))
@@ -304,15 +306,18 @@ class income_window(QMainWindow):
                     self.incomeButtonIW.setText("Income Added!")
                     self.incomeButtonIW.setDisabled(True)
                     self.incomeButtonIW.setStyleSheet("color: Black;")
-
+                    self.window.total_balance_label.setText(f"Total Balance: $ {self.window.total_balance()}")
+                    self.window.total_income.setText(f"Total Income: $ {self.window.total_income_()}")
+                    self.window.transactions5.setText(self.window.output())
             except ValueError:
                 self.error_label.setText("Error: Enter a Float or Int number!")
                 self.error_label.setStyleSheet("color: hsl(0, 100%, 62%);" \
                                                 "font-weight: Bold;")
                 
 class expense_window(QMainWindow):
-    def __init__(self):
+    def __init__(self, window):
         super().__init__()
+        self.window = window
         self.setGeometry(800,350,400,200)
         self.setWindowTitle("Add Expense")
         self.setWindowIcon(QIcon("INCOME-EXPENSE-tracker\\BankImage.jpg"))
@@ -388,15 +393,18 @@ class expense_window(QMainWindow):
                     self.expenseButtonEW.setText("Expense Added!")
                     self.expenseButtonEW.setDisabled(True)
                     self.expenseButtonEW.setStyleSheet("color: Black;")
-    
+                    self.window.total_balance_label.setText(f"Total Balance: $ {self.window.total_balance()}")
+                    self.window.total_expenses.setText(f"Total Expenses: $ {self.window.total_expense()}")
+                    self.window.transactions5.setText(self.window.output())
             except ValueError:
                 self.error_label.setText("Error: Enter a Float or Int number!")
                 self.error_label.setStyleSheet("color: hsl(0, 100%, 62%);" \
                                                 "font-weight: Bold;")
 
 class transaction_window(QMainWindow):
-    def __init__(self):
+    def __init__(self, window):
         super().__init__()
+        self.window = window
         self.setGeometry(600,300,800,500)
         self.setWindowTitle("View Transactions")
         self.setWindowIcon(QIcon("INCOME-EXPENSE-tracker\\BankImage.jpg"))
