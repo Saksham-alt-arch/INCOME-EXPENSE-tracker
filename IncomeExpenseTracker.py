@@ -450,7 +450,9 @@ class transaction_window(QMainWindow):
         self.showingAllTransactions.setGeometry(175,55,750,325)
         self.showingAllTransactions.setAlignment(Qt.AlignTop)
 
-        self.balanceincomeexpense = QLabel(self)
+        self.balanceincomeexpense = QLabel("EOM Total Balance: \n" \
+                                           "EOM Total Income:\n" \
+                                           "EOM Total Expense: ",self)
         self.balanceincomeexpense.setGeometry(370,385,370,100)
 
         self.transactionsformonth.setObjectName("transactionsformonth")
@@ -472,7 +474,10 @@ class transaction_window(QMainWindow):
                                           font-family: Consolas;
                                           font-size: 20px;
                                           color: hsl(239, 100%, 90%);}
-            QLabel#balanceincomeexpense{border: 1px solid;}
+            QLabel#balanceincomeexpense{border: 1px solid;
+                                        font-size: 20px;
+                                        font-weight: Bold;
+                                        color: hsl(44, 0%, 100%);}
         """)
 
         self.month_Jan.toggled.connect(self.monthlyTransactions)
@@ -496,7 +501,6 @@ class transaction_window(QMainWindow):
         my_cursor = mydb.cursor()
         my_cursor.execute(sql, values)
         results = my_cursor.fetchall()
-
         output = ""
         for result in results:
             output += "\n"
@@ -518,46 +522,90 @@ class transaction_window(QMainWindow):
             self.showingAllTransactions.setText(output)
             self.showingAllTransactions.setAlignment(Qt.AlignTop)
 
+    def end_of_month_sql(self, values_month):
+        sql = "SELECT Balance, Income, Expense FROM total_everything WHERE Month_ = %s;"
+
+        my_cursor = mydb.cursor()
+        my_cursor.execute(sql, values_month)
+        results = my_cursor.fetchone()
+        Balance = ""
+        Income = ""
+        Expense = ""
+        for index,result in enumerate(results):
+            if index == 0:
+                Balance = f"{result}"
+            elif index == 1:
+                Income = f"{result}"
+            elif index == 2:
+                Expense = f"{result}"
+            else: 
+                pass
+
+        self.balanceincomeexpense.setText(f"EOM Total Balance: ${Balance}\nEOM Total Income: ${Income}\nEOM Total Expense: ${Expense}")
 
     def monthlyTransactions(self):
         radio_button = self.sender()
 
         if radio_button.isChecked() and self.month_Jan.isChecked():
             values = ("202_-01-%",)
+            values_month = ("January",)
             self.sql_connect(values)
+            self.end_of_month_sql(values_month)
         elif radio_button.isChecked() and self.month_Feb.isChecked():
             values = ("202_-02-%",)
+            values_month = ("Febuary",)
             self.sql_connect(values)
+            self.end_of_month_sql(values_month)
         elif radio_button.isChecked() and self.month_Mar.isChecked():
             values = ("202_-03-%",)
+            values_month = ("March",)
             self.sql_connect(values)
+            self.end_of_month_sql(values_month)
         elif radio_button.isChecked() and self.month_Apr.isChecked():
             values = ("202_-04-%",)
+            values_month = ("April",)
             self.sql_connect(values)
+            self.end_of_month_sql(values_month)
         elif radio_button.isChecked() and self.month_May.isChecked():
             values = ("202_-05-%",)
+            values_month = ("May",)
             self.sql_connect(values)
+            self.end_of_month_sql(values_month)
         elif radio_button.isChecked() and self.month_Jun.isChecked():
             values = ("202_-06-%",)
+            values_month = ("June",)
             self.sql_connect(values)
+            self.end_of_month_sql(values_month)
         elif radio_button.isChecked() and self.month_Jul.isChecked():
             values = ("202_-07-%",)
+            values_month = ("July",)
             self.sql_connect(values)
+            self.end_of_month_sql(values_month)
         elif radio_button.isChecked() and self.month_Aug.isChecked():
             values = ("202_-08-%",)
+            values_month = ("August",)
             self.sql_connect(values)
+            self.end_of_month_sql(values_month)
         elif radio_button.isChecked() and self.month_Sep.isChecked():
             values = ("202_-09-%",)
+            values_month = ("September",)
             self.sql_connect(values)
+            self.end_of_month_sql(values_month)
         elif radio_button.isChecked() and self.month_Oct.isChecked():
             values = ("202_-10-%",)
+            values_month = ("October",)
             self.sql_connect(values)
+            self.end_of_month_sql(values_month)
         elif radio_button.isChecked() and self.month_Nov.isChecked():
             values = ("202_-11-%",)
+            values_month = ("November",)
             self.sql_connect(values)
+            self.end_of_month_sql(values_month)
         elif radio_button.isChecked() and self.month_Dec.isChecked():
             values = ("202_-12-%",)
+            values_month = ("December",)
             self.sql_connect(values)
+            self.end_of_month_sql(values_month)
         else: 
             pass
  
