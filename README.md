@@ -1,8 +1,6 @@
 # FINANCE APP
 
 <br>
-Made with 
-<br>
 Finance App — Income & Expense Tracker
 <br>
 A Python GUI application that helps users track their day-to-day financial transactions and manage their money.
